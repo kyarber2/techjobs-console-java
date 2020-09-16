@@ -1,8 +1,8 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
+
+import static org.launchcode.techjobs.console.JobData.findAll;
 
 /**
  * Created by LaunchCode
@@ -11,7 +11,7 @@ public class TechJobs {
 
     private static Scanner in = new Scanner(System.in);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
 
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
@@ -30,7 +30,7 @@ public class TechJobs {
 
         // Allow the user to search until they manually quit
         while (true) {
-
+            //getUserSelection gets input from terminal
             String actionChoice = getUserSelection("View jobs by:", actionChoices);
 
             if (actionChoice.equals("list")) {
@@ -38,10 +38,10 @@ public class TechJobs {
                 String columnChoice = getUserSelection("List", columnChoices);
 
                 if (columnChoice.equals("all")) {
-                    printJobs(JobData.findAll());
+                    printJobs(findAll());
                 } else {
 
-                    ArrayList<String> results = JobData.findAll(columnChoice);
+                    ArrayList<String> results = findAll(columnChoice);
 
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
@@ -61,7 +61,9 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    //call findByValue here
+                     printJobs(JobData.findByValue(searchTerm));
+                      System.out.println("Search all fields not yet implemented.");
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -103,14 +105,31 @@ public class TechJobs {
                 validChoice = true;
             }
 
-        } while(!validChoice);
+        } while (!validChoice);
 
         return choiceKeys[choiceIdx];
     }
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
+        //System.out.println(searchField);
+        if (!someJobs.isEmpty()) {
+            for (HashMap job : someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+                System.out.print(
+                        "\n*****" +
+                                "\nposition type: " + job.get("position type") +
+                                "\n name: " + job.get("name") +
+                                "\n employer: " + job.get("employer") +
+                                "\n location: " + job.get("location") +
+                                "\n core competency: " + job.get("core compentency") +
+                                "\n*****"
+                );
+            }
+        } else {
+            System.out.println("No data matches the search term.");
+        }
+
     }
+
 }

@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -28,6 +26,9 @@ public class JobData {
      * @param field The column to retrieve values from
      * @return List of all of the values of the given field
      */
+
+    //method that finds all possible values that occur within single column and eliminates duplicates
+    //overloaded--has different parameters, but the same method name
     public static ArrayList<String> findAll(String field) {
 
         // load data, if not already loaded
@@ -37,7 +38,7 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
             String aValue = row.get(field);
-
+            //if value isn't already there, add to list
             if (!values.contains(aValue)) {
                 values.add(aValue);
             }
@@ -45,7 +46,7 @@ public class JobData {
 
         return values;
     }
-
+    //method that gets all of the data--runs if no parameters are passed in
     public static ArrayList<HashMap<String, String>> findAll() {
 
         // load data, if not already loaded
@@ -65,6 +66,8 @@ public class JobData {
      * @param value Value of teh field to search for
      * @return List of all jobs matching the criteria
      */
+    //if the column has the value in it
+    //similar to find by value
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
 
         // load data, if not already loaded
@@ -81,6 +84,27 @@ public class JobData {
             }
         }
 
+        return jobs;
+    }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String input) {
+        loadData();
+
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> job : allJobs) {
+
+            for(String key : job.keySet()) {
+                String value = job.get(key);
+                //System.out.println(value);
+                if(value.toLowerCase().contains(input.toLowerCase())) {
+                    jobs.add(job);
+                    break;
+                }
+
+            }
+        }
         return jobs;
     }
 
